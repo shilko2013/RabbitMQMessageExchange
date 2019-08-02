@@ -7,7 +7,7 @@ import com.rabbitmq.client.MessageProperties;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitMQProducer extends RabbitMQClient implements Producer, AutoCloseable {
+public class RabbitMQProducer extends RabbitMQClient implements MessageProducer {
 
     public RabbitMQProducer() {
         super();
@@ -26,6 +26,5 @@ public class RabbitMQProducer extends RabbitMQClient implements Producer, AutoCl
     public void sendMessage(String routingKey, String message) throws IOException, TimeoutException {
         getChannel().basicPublish(getDefaultExchangeName(), routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
     }
-
 
 }
