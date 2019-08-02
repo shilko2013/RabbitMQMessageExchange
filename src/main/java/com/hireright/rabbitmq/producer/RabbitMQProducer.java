@@ -9,8 +9,6 @@ import com.rabbitmq.client.MessageProperties;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -19,14 +17,12 @@ public class RabbitMQProducer implements AutoCloseable { //TODO: Logger
     private final static String defaultPathToResources
             = "src" + File.pathSeparator + "main" + File.pathSeparator + "resources"
             + File.pathSeparator + "rabbitmq.properties";
-    private static int DEFAULT_NUMBER_TASK_THREADS = 10;
     private static int DEFAULT_CLOSE_TIME_SECONDS = 1;
     private static String DEFAULT_EXCHANGE_NAME = "default_exchange_name";
     private static String DEFAULT_QUEUE_NAME = "default_queue_name";
 
     private final ConnectionFactory connectionFactory;
     private Channel channel;
-    private final ExecutorService executor;
     private int closeTimeSeconds;
 
     static {
@@ -35,7 +31,6 @@ public class RabbitMQProducer implements AutoCloseable { //TODO: Logger
     }
 
     private static void setDefaultFields(PropertiesReader propertiesReader) {
-        setDefaultNumberTaskThreads(propertiesReader);
         setDefaultCloseTimeSeconds(propertiesReader);
         setDefaultExchangeName(propertiesReader);
         setDefaultQueueName(propertiesReader);
@@ -55,14 +50,6 @@ public class RabbitMQProducer implements AutoCloseable { //TODO: Logger
         DEFAULT_EXCHANGE_NAME = exchangeName;
     }
 
-    private static void setDefaultNumberTaskThreads(PropertiesReader propertiesReader) {
-        String numberThreads = propertiesReader.getProperty("producer.numthreads");
-        if (numberThreads == null) //default init value
-            return;
-        if ((DEFAULT_NUMBER_TASK_THREADS = Integer.parseInt(numberThreads)) < 1)
-            throw new IllegalArgumentException();
-    }
-
     private static void setDefaultCloseTimeSeconds(PropertiesReader propertiesReader) {
         String closeTimeSeconds = propertiesReader.getProperty("producer.closetime");
         if (closeTimeSeconds == null) //default init value
@@ -71,22 +58,12 @@ public class RabbitMQProducer implements AutoCloseable { //TODO: Logger
             throw new IllegalArgumentException();
     }
 
-    /*
-            Runnable worker = new MyRunnable(10000000L + i);
-            executor.execute(worker);
-    */
-
     public RabbitMQProducer() {
         this(new ConnectionFactory());
     }
 
     public RabbitMQProducer(ConnectionFactory connectionFactory) {
-        this(connectionFactory, DEFAULT_NUMBER_TASK_THREADS);
-    }
-
-    public RabbitMQProducer(ConnectionFactory connectionFactory, int numberTaskThreads) {
         this.connectionFactory = connectionFactory;
-        executor = Executors.newFixedThreadPool(numberTaskThreads);
         closeTimeSeconds = DEFAULT_CLOSE_TIME_SECONDS;
     }
 
@@ -135,10 +112,7 @@ public class RabbitMQProducer implements AutoCloseable { //TODO: Logger
     }
 
     @Override
-    public void close() throws IOException, TimeoutException, InterruptedException {
-        executor.shutdown();
-        if (!executor.awaitTermination(closeTimeSeconds, TimeUnit.SECONDS))
-            throw new TimeoutException();
+    public void close() throws IOException, TimeoutException {
         Connection connection = channel.getConnection();
         channel.close();
         connection.close();
