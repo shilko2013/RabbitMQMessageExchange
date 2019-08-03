@@ -20,7 +20,6 @@ public abstract class RabbitMQClient implements AutoCloseable {
 
     private final ConnectionFactory connectionFactory;
     private Channel channel;
-    private int closeTimeSeconds;
 
     static {
         PropertiesReader propertiesReader = new PropertiesReader(defaultPathToResources);
@@ -95,10 +94,6 @@ public abstract class RabbitMQClient implements AutoCloseable {
 
     public static String getDefaultQueueName() {
         return DEFAULT_QUEUE_NAME;
-    }
-
-    public int getCloseTimeSeconds() {
-        return closeTimeSeconds;
     }
 
     @Override

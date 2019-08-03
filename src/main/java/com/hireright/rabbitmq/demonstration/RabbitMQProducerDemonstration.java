@@ -6,7 +6,7 @@ import com.hireright.rabbitmq.producer.RabbitMQProducer;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class RabbitMQProducerDemonstration { //TODO: Logger, Consumer error
+public class RabbitMQProducerDemonstration { //TODO: Logger
 
     public static void main(String[] args) {
         try (MessageProducer producer = new RabbitMQProducer(); Scanner in = new Scanner(System.in)) {
