@@ -26,7 +26,7 @@ public class RabbitMQConsumer extends RabbitMQClient implements MessageConsumer 
 
     @Override
     public void addConsumer(String consumerTag, Consumer consumer) throws IOException, TimeoutException {
-        addConsumer(getDefaultExchangeName(), autoAck, consumerTag, consumer);
+        addConsumer(getDefaultQueueName(), autoAck, consumerTag, consumer);
     }
 
     @Override
