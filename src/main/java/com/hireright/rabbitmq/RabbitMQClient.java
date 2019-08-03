@@ -13,8 +13,8 @@ import java.util.concurrent.TimeoutException;
 public abstract class RabbitMQClient implements AutoCloseable {
 
     private final static String defaultPathToResources
-            = "src" + File.pathSeparator + "main" + File.pathSeparator + "resources"
-            + File.pathSeparator + "rabbitmq.properties";
+            = "src" + File.separator + "main" + File.separator + "resources"
+            + File.separator + "rabbitmq.properties";
     private static int DEFAULT_CLOSE_TIME_SECONDS = 1;
     private static String DEFAULT_EXCHANGE_NAME = "default_exchange_name";
     private static String DEFAULT_QUEUE_NAME = "default_queue_name";

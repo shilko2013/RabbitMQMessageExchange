@@ -3,7 +3,6 @@ package com.hireright.rabbitmq.consumer;
 import com.hireright.rabbitmq.RabbitMQClient;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.DefaultConsumer;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

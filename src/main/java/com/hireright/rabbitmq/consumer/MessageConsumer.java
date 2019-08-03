@@ -2,7 +2,7 @@ package com.hireright.rabbitmq.consumer;
 
 import com.rabbitmq.client.Consumer;
 
-public interface MessageConsumer {
+public interface MessageConsumer extends AutoCloseable {
 
     void addConsumer(String consumerTag, Consumer consumer) throws Exception;
 
