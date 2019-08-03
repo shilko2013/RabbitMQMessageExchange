@@ -15,7 +15,6 @@ public abstract class RabbitMQClient implements AutoCloseable {
     private final static String defaultPathToResources
             = "src" + File.separator + "main" + File.separator + "resources"
             + File.separator + "rabbitmq.properties";
-    private static int DEFAULT_CLOSE_TIME_SECONDS = 1;
     private static String DEFAULT_EXCHANGE_NAME = "default_exchange_name";
     private static String DEFAULT_QUEUE_NAME = "default_queue_name";
 
@@ -29,7 +28,6 @@ public abstract class RabbitMQClient implements AutoCloseable {
     }
 
     private static void setDefaultFields(PropertiesReader propertiesReader) {
-        setDefaultCloseTimeSeconds(propertiesReader);
         setDefaultExchangeName(propertiesReader);
         setDefaultQueueName(propertiesReader);
     }
@@ -48,23 +46,12 @@ public abstract class RabbitMQClient implements AutoCloseable {
         DEFAULT_EXCHANGE_NAME = exchangeName;
     }
 
-    private static void setDefaultCloseTimeSeconds(PropertiesReader propertiesReader) {
-        String closeTimeSeconds = propertiesReader.getProperty("rabbitmq.closetime");
-        if (closeTimeSeconds == null) //default init value
-            return;
-        int parsedValue = Integer.parseInt(closeTimeSeconds);
-        if (parsedValue < 0)
-            throw new IllegalArgumentException();
-        DEFAULT_CLOSE_TIME_SECONDS = parsedValue;
-    }
-
     public RabbitMQClient() {
         this(new ConnectionFactory());
     }
 
     public RabbitMQClient(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
-        closeTimeSeconds = DEFAULT_CLOSE_TIME_SECONDS;
     }
 
     public Channel getChannel() throws IOException, TimeoutException {
@@ -100,10 +87,6 @@ public abstract class RabbitMQClient implements AutoCloseable {
 
     public static String getDefaultPathToResources() {
         return defaultPathToResources;
-    }
-
-    public static int getDefaultCloseTimeSeconds() {
-        return DEFAULT_CLOSE_TIME_SECONDS;
     }
 
     public static String getDefaultExchangeName() {
