@@ -9,14 +9,14 @@ import java.util.Scanner;
 public class RabbitMQProducerDemonstration {
 
     public static void main(String[] args) {
-        System.out.println("Type a text for sending below. Every line is a separate message. Press Crtl+D for quit.");
         try (MessageProducer producer = new RabbitMQProducer(); Scanner in = new Scanner(System.in)) {
-            in.nextLine();
-            while (in.hasNext()) {
+            System.out.println("Type a text for sending below. Every line is a separate message. Press Crtl+D for quit.");
+            for (; ; ) {
                 System.out.print("> ");
                 String input = in.nextLine();
                 producer.sendMessage(input);
             }
+        } catch (NoSuchElementException ignored) {
         } catch (Exception e) {
             e.printStackTrace();
         }
