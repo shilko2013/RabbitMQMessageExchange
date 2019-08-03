@@ -1,13 +1,18 @@
 package com.hireright.rabbitmq.consumer;
 
 import com.hireright.rabbitmq.RabbitMQClient;
-import com.hireright.util.PropertiesReader;
-import com.rabbitmq.client.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import com.rabbitmq.client.ConnectionFactory;
 
 public class RabbitMQConsumer extends RabbitMQClient implements MessageConsumer {
 
+    public RabbitMQConsumer() {
+        super();
+    }
+
+    public RabbitMQConsumer(ConnectionFactory connectionFactory) {
+        super(connectionFactory);
+    }
+
+
+    
 }

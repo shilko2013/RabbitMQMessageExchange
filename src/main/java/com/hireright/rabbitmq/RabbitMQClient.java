@@ -35,21 +35,21 @@ public abstract class RabbitMQClient implements AutoCloseable {
     }
 
     private static void setDefaultQueueName(PropertiesReader propertiesReader) {
-        String queueName = propertiesReader.getProperty("producer.queue.name");
+        String queueName = propertiesReader.getProperty("rabbitmq.queue.name");
         if (queueName == null) //default init value
             return;
         DEFAULT_QUEUE_NAME = queueName;
     }
 
     private static void setDefaultExchangeName(PropertiesReader propertiesReader) {
-        String exchangeName = propertiesReader.getProperty("producer.exchange.name");
+        String exchangeName = propertiesReader.getProperty("rabbitmq.exchange.name");
         if (exchangeName == null) //default init value
             return;
         DEFAULT_EXCHANGE_NAME = exchangeName;
     }
 
     private static void setDefaultCloseTimeSeconds(PropertiesReader propertiesReader) {
-        String closeTimeSeconds = propertiesReader.getProperty("producer.closetime");
+        String closeTimeSeconds = propertiesReader.getProperty("rabbitmq.closetime");
         if (closeTimeSeconds == null) //default init value
             return;
         int parsedValue = Integer.parseInt(closeTimeSeconds);
@@ -76,6 +76,7 @@ public abstract class RabbitMQClient implements AutoCloseable {
     private Channel initChannel() throws IOException, TimeoutException {
         channel = connectionFactory.newConnection().createChannel();
         channel.exchangeDeclare(DEFAULT_EXCHANGE_NAME, "direct", true);
+        createQueue();
         return channel;
     }
 
